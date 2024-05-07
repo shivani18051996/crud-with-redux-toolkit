@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteUser } from '../redux/slices/userSlice';
 import UserForm from './UserForm';
+import { List, ListItem, ListItemText, Button, IconButton } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 function UserList() {
     const users = useSelector(state => state.users.users);
-    console.log(users,"userList")
     const dispatch = useDispatch();
     const [isEditing, setIsEditing] = useState(false);
     const [currentUser, setCurrentUser] = useState(null);
@@ -16,7 +18,6 @@ function UserList() {
     };
 
     const handleEdit = (user) => {
-        console.log(user,"userEdit")
         setIsEditing(true);
         setCurrentUser(user);
     };
@@ -33,7 +34,9 @@ function UserList() {
                 <div>
                     <h3>Edit User</h3>
                     <UserForm user={currentUser} setIsEditing={setIsEditing} />
-                    <button onClick={handleCancelEdit}>Cancel Edit</button>
+                    <Button onClick={handleCancelEdit} variant="outlined" color="primary">
+                        Cancel Edit
+                    </Button>
                 </div>
             ) : (
                 <div>
@@ -41,15 +44,22 @@ function UserList() {
                     <UserForm />
                 </div>
             )}
-            <ul>
-                {users?.map(user => (
-                    <li key={user.id}>
-                        {user.name} - {user.email}
-                        <button onClick={() => handleEdit(user)}>Edit</button>
-                        <button onClick={() => handleDelete(user.id)}>Delete</button>
-                    </li>
+            <List>
+                {users.map(user => (
+                    <ListItem key={user.id} secondaryAction={
+                        <>
+                            <IconButton edge="end" aria-label="edit" onClick={() => handleEdit(user)}>
+                                <EditIcon />
+                            </IconButton>
+                            <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(user.id)}>
+                                <DeleteIcon />
+                            </IconButton>
+                        </>
+                    }>
+                        <ListItemText primary={`${user.name} - ${user.email}`} />
+                    </ListItem>
                 ))}
-            </ul>
+            </List>
         </div>
     );
 }

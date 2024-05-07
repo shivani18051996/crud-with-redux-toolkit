@@ -1,9 +1,9 @@
 // src/features/userSlice.js
-import { createSlice, nanoid } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     users: [
-        { id: nanoid(), name: "John Doe", email: "johndoe@example.com" }
+        { id: new Date().getTime(), name: "John Doe", email: "johndoe@example.com" }
     ]
 };
 

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateUser, addUser } from '../redux/slices/userSlice';
+import { TextField, Button, Box } from '@mui/material';
 
 function UserForm({ user, setIsEditing }) {
     const dispatch = useDispatch();
@@ -26,7 +27,9 @@ function UserForm({ user, setIsEditing }) {
         e.preventDefault();
         if (user) {
             dispatch(updateUser(formState));
-            setIsEditing && setIsEditing(false);
+            if (setIsEditing) {
+                setIsEditing(false);
+            }
         } else {
             dispatch(addUser({...formState, id: Date.now()})); // Assuming ID is managed like this for simplicity
         }
@@ -34,23 +37,37 @@ function UserForm({ user, setIsEditing }) {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <input 
-                type="text"
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                label="Name"
                 name="name"
                 value={formState.name}
                 onChange={handleChange}
-                placeholder="Name"
+                autoFocus
             />
-            <input 
-                type="email"
+            <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                label="Email"
                 name="email"
                 value={formState.email}
                 onChange={handleChange}
-                placeholder="Email"
             />
-            <button type="submit">{user ? 'Update User' : 'Add User'}</button>
-        </form>
+            <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+            >
+                {user ? 'Update User' : 'Add User'}
+            </Button>
+        </Box>
     );
 }
 
